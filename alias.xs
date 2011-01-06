@@ -207,10 +207,9 @@ typedef void (*cb_t)(pTHX_ OP *o);
 STATIC void
 _walk_optree (pTHX_ OP *o, cb_t cb, ptable *visited)
 {
-    if (!o || ptable_fetch(visited, o))
-        return;
-
     for (; o; o = o->op_next) {
+        if (ptable_fetch(visited, o))
+            break;
         ptable_store(visited, o, o);
 
         switch (PL_opargs[o->op_type] & OA_CLASS_MASK) {
